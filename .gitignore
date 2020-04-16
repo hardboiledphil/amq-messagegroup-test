@@ -29,3 +29,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### OTHER FILES CREATED BY XA ###
+*.lck
+*.log

@@ -1,31 +1,49 @@
 package com.example.demo;
 
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
+@EnableTransactionManagement
 public class DataSourceConfig {
 
-    @Bean
+    @Bean(name="datasourceODS")
     public DataSource dataSourceODS() {
-        return DataSourceBuilder.create()
-                .driverClassName("oracle.jdbc.OracleDriver")
-                .url("jdbc:oracle:thin:@REUXEUUX1089:1521:d18lod1")
-                .username("OSOWNERBS1")
-                .password("OSOWNERBS1")
-                .build();
+
+        AtomikosDataSourceBean dataSourceBeanODS = new AtomikosDataSourceBean();
+        dataSourceBeanODS.setUniqueResourceName("oracleODS");
+        dataSourceBeanODS.setXaDataSourceClassName("oracle.jdbc.xa.client.OracleXADataSource");
+
+        Properties p = new Properties();
+        p.setProperty ( "user" , "OSOWNERBS1" );
+        p.setProperty ( "password" , "OSOWNERBS1" );
+        p.setProperty ( "URL" , "jdbc:oracle:thin:@REUXEUUX1089:1521:d18lod1" );
+        dataSourceBeanODS.setXaProperties( p );
+
+        return dataSourceBeanODS;
+
     }
 
-    @Bean
+    @Bean(name="datasourceGOPS")
     public DataSource dataSourceGOPS() {
-        return DataSourceBuilder.create()
-                .driverClassName("oracle.jdbc.OracleDriver")
-                .url("jdbc:oracle:thin:@REUXEUUX1089:1521:d18lpe1")
-                .username("GPOWNERBS1")
-                .password("GPOWNERBS1")
-                .build();
+
+        AtomikosDataSourceBean dataSourceBeanGOPS = new AtomikosDataSourceBean();
+        dataSourceBeanGOPS.setUniqueResourceName("oracleGOPS");
+        dataSourceBeanGOPS.setXaDataSourceClassName("oracle.jdbc.xa.client.OracleXADataSource");
+
+        Properties p = new Properties();
+        p.setProperty ( "user" , "GPOWNERBS1" );
+        p.setProperty ( "password" , "GPOWNERBS1" );
+        p.setProperty ( "URL" , "jdbc:oracle:thin:@REUXEUUX1089:1521:d18lpe1" );
+        dataSourceBeanGOPS.setXaProperties( p );
+
+        return dataSourceBeanGOPS;
+
     }
 }
