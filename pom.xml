@@ -42,6 +42,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.atomikos</groupId>
+			<artifactId>transactions-jms</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.atomikos</groupId>
 			<artifactId>transactions-jdbc</artifactId>
 		</dependency>
 		<dependency>
