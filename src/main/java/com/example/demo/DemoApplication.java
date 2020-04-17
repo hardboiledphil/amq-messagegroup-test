@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,7 @@ import java.util.Optional;
 
 @SpringBootApplication
 @EnableJms
+@EnableTransactionManagement
 @Configuration
 public class DemoApplication {
 
@@ -57,8 +59,6 @@ public class DemoApplication {
 	}
 	@Bean(name = "transactionManager")
 	@DependsOn({ "userTransaction", "atomikosTransactionManager"})
-//	public PlatformTransactionManager transactionManager(@Qualifier ("userTransaction") UserTransaction userTransaction,
-//														 @Qualifier ("atomikosTransactionManager") TransactionManager atomikosTransactionManager) throws Throwable {
 	public PlatformTransactionManager transactionManager() throws Throwable {
 		System.out.println("transactionManager being created");
 
@@ -81,8 +81,12 @@ public class DemoApplication {
 		activeMQXAConnectionFactory.setPassword("admin");
 
 		AtomikosConnectionFactoryBean atomikosConnectionFactoryBean = new AtomikosConnectionFactoryBean();
+		atomikosConnectionFactoryBean.setUniqueResourceName("GOPS-EOD-MANAGER");
 		atomikosConnectionFactoryBean.setLocalTransactionMode(false);
 		atomikosConnectionFactoryBean.setXaConnectionFactory(activeMQXAConnectionFactory);
+		atomikosConnectionFactoryBean.setMinPoolSize(3);
+		atomikosConnectionFactoryBean.setMaxPoolSize(10);
+
 		return atomikosConnectionFactoryBean;
 	}
 
