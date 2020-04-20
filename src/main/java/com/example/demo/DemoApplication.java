@@ -39,39 +39,8 @@ public class DemoApplication {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
-	@Bean
-	@Qualifier("userTransaction")
-	public UserTransaction userTransaction() throws Throwable {
-		System.out.println("userTransaction being created");
-		UserTransactionImp userTransactionImp = new UserTransactionImp();
-		userTransactionImp.setTransactionTimeout(60);
-		return userTransactionImp;
-	}
 
-	@Bean(name = "atomikosTransactionManager", initMethod = "init", destroyMethod = "close")
-	public TransactionManager atomikosTransactionManager() throws Throwable {
-		System.out.println("atomikosTransactionManager being created");
-		UserTransactionManager userTransactionManager = new UserTransactionManager();
-		userTransactionManager.setForceShutdown(false);
-		// for hibernate add in the following to set the transaction manager
-		//AtomikosJtaPlatform.transactionManager = userTransactionManager;
-		return userTransactionManager;
-	}
-	@Bean(name = "transactionManager")
-	@DependsOn({ "userTransaction", "atomikosTransactionManager"})
-	public PlatformTransactionManager transactionManager() throws Throwable {
-		System.out.println("transactionManager being created");
-
-		UserTransaction userTransaction = userTransaction();
-
-		// for hibernate add in the following to set the user transaction
-		// AtomikosJtaPlatform.transaction = userTransaction;
-
-		TransactionManager atomikosTransactionManager = atomikosTransactionManager();
-		return new JtaTransactionManager(userTransaction, atomikosTransactionManager);
-	}
-
-	@Bean(name = "jmsConnectionFactory")
+	@Bean(name = "ConnectionFactory")
 	public ConnectionFactory jmsConnectionFactory() throws Throwable {
 		System.out.println("jmsConnectionFactory being created");
 
@@ -91,8 +60,8 @@ public class DemoApplication {
 	}
 
 	@Bean(name = "jmsTemplate")
-	@DependsOn("jmsConnectionFactory")
-	public JmsTemplate jmsTemplate(@Qualifier ("jmsConnectionFactory") ConnectionFactory jmsConnectionFactory) {
+	@DependsOn("ConnectionFactory")
+	public JmsTemplate jmsTemplate(@Qualifier ("ConnectionFactory") ConnectionFactory jmsConnectionFactory) {
 		System.out.println("jmsTemplate being created");
 		JmsTemplate jmsTemplate = new JmsTemplate();
 		jmsTemplate.setConnectionFactory(jmsConnectionFactory);
