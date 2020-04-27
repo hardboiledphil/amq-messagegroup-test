@@ -37,11 +37,23 @@ public class MessageReceiver implements MessageListener {
                 throw new RuntimeException("templates are null - oh dear");
             }
 
-            System.out.println("Message received: " + message.getBody(String.class));
+            String messageStr = message.getBody(String.class);
 
-            this.jdbcTemplateODS.update(" update MESSAGESPJA SET PROCESSED='Y' WHERE ID = ? ", 1);
+            System.out.println("Message received: '" + messageStr + "'");
 
-            this.jdbcTemplateGOPS.update(" update MESSAGESPJA SET PROCESSED='Y' WHERE ID = ? ", 1);
+            int idloc = messageStr.indexOf("id: ");
+
+            String idToUpdate = messageStr.substring(idloc + 4, idloc + 6);
+
+            System.out.println("Updating for ID: " + idToUpdate);
+
+            this.jdbcTemplateODS.update(" update MESSAGESPJA SET PROCESSED='Y' WHERE ID = ? ", idToUpdate);
+
+            this.jdbcTemplateGOPS.update(" update MESSAGESPJA SET PROCESSED='Y' WHERE ID = ? ", idToUpdate);
+
+            if (message.getBody(String.class).contains("fail")) {
+                throw new RuntimeException("Failing in messagelistener-onMessage()");
+            }
 
         } catch (JMSException ex) {
             ex.printStackTrace();
