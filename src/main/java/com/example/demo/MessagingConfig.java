@@ -49,4 +49,99 @@ public class MessagingConfig {
         return container;
 
     }
+
+    @Bean
+    @Transactional
+    public DefaultMessageListenerContainer messageListenerContainer1() {
+
+        Assert.isInstanceOf(AtomikosConnectionFactoryBean.class, ConnectionFactory);
+        Assert.isInstanceOf(JtaTransactionManager.class, JtaTransactionManager);
+        Assert.isInstanceOf(JdbcTemplate.class, jdbcTemplateODS);
+        Assert.isInstanceOf(JdbcTemplate.class, jdbcTemplateGOPS);
+
+        DefaultMessageListenerContainer container = new DefaultMessageListenerContainer();
+        container.setTransactionManager(JtaTransactionManager);
+        container.setConnectionFactory(this.ConnectionFactory);
+        container.setDestinationName(gops_test_queue_name);
+        container.setMessageListener(new MessageReceiver(jdbcTemplateODS, jdbcTemplateGOPS));
+        container.setSessionTransacted(true);
+        return container;
+
+    }
+
+    @Bean
+    @Transactional
+    public DefaultMessageListenerContainer messageListenerContainer2() {
+
+        Assert.isInstanceOf(AtomikosConnectionFactoryBean.class, ConnectionFactory);
+        Assert.isInstanceOf(JtaTransactionManager.class, JtaTransactionManager);
+        Assert.isInstanceOf(JdbcTemplate.class, jdbcTemplateODS);
+        Assert.isInstanceOf(JdbcTemplate.class, jdbcTemplateGOPS);
+
+        DefaultMessageListenerContainer container = new DefaultMessageListenerContainer();
+        container.setTransactionManager(JtaTransactionManager);
+        container.setConnectionFactory(this.ConnectionFactory);
+        container.setDestinationName(gops_test_queue_name);
+        container.setMessageListener(new MessageReceiver(jdbcTemplateODS, jdbcTemplateGOPS));
+        container.setSessionTransacted(true);
+        return container;
+
+    }
+
+    @Bean
+    @Transactional
+    public DefaultMessageListenerContainer messageListenerContainer3() {
+
+        Assert.isInstanceOf(AtomikosConnectionFactoryBean.class, ConnectionFactory);
+        Assert.isInstanceOf(JtaTransactionManager.class, JtaTransactionManager);
+        Assert.isInstanceOf(JdbcTemplate.class, jdbcTemplateODS);
+        Assert.isInstanceOf(JdbcTemplate.class, jdbcTemplateGOPS);
+
+        DefaultMessageListenerContainer container = new DefaultMessageListenerContainer();
+        container.setTransactionManager(JtaTransactionManager);
+        container.setConnectionFactory(this.ConnectionFactory);
+        container.setDestinationName(gops_test_queue_name);
+        container.setMessageListener(new MessageReceiver(jdbcTemplateODS, jdbcTemplateGOPS));
+        container.setSessionTransacted(true);
+        return container;
+
+    }
+
+    @Bean
+    @Transactional
+    public DefaultMessageListenerContainer messageListenerContainer4() {
+
+        Assert.isInstanceOf(AtomikosConnectionFactoryBean.class, ConnectionFactory);
+        Assert.isInstanceOf(JtaTransactionManager.class, JtaTransactionManager);
+        Assert.isInstanceOf(JdbcTemplate.class, jdbcTemplateODS);
+        Assert.isInstanceOf(JdbcTemplate.class, jdbcTemplateGOPS);
+
+        DefaultMessageListenerContainer container = new DefaultMessageListenerContainer();
+        container.setTransactionManager(JtaTransactionManager);
+        container.setConnectionFactory(this.ConnectionFactory);
+        container.setDestinationName(gops_test_queue_name);
+        container.setMessageListener(new MessageReceiver(jdbcTemplateODS, jdbcTemplateGOPS));
+        container.setSessionTransacted(true);
+        return container;
+
+    }
+
+    @Bean
+    @Transactional
+    public DefaultMessageListenerContainer messageListenerContainer5() {
+
+        Assert.isInstanceOf(AtomikosConnectionFactoryBean.class, ConnectionFactory);
+        Assert.isInstanceOf(JtaTransactionManager.class, JtaTransactionManager);
+        Assert.isInstanceOf(JdbcTemplate.class, jdbcTemplateODS);
+        Assert.isInstanceOf(JdbcTemplate.class, jdbcTemplateGOPS);
+
+        DefaultMessageListenerContainer container = new DefaultMessageListenerContainer();
+        container.setTransactionManager(JtaTransactionManager);
+        container.setConnectionFactory(this.ConnectionFactory);
+        container.setDestinationName(gops_test_queue_name);
+        container.setMessageListener(new MessageReceiver(jdbcTemplateODS, jdbcTemplateGOPS));
+        container.setSessionTransacted(true);
+        return container;
+
+    }
 }

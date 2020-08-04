@@ -47,13 +47,13 @@ public class MessageReceiver implements MessageListener {
 
             System.out.println("Updating for ID: " + idToUpdate);
 
-            this.jdbcTemplateODS.update(" update MESSAGESPJA SET PROCESSED='Y' WHERE ID = ? ", idToUpdate);
+//            this.jdbcTemplateODS.update(" update MESSAGESPJA SET PROCESSED='Y' WHERE ID = ? ", idToUpdate);
 
-            this.jdbcTemplateGOPS.update(" update MESSAGESPJA SET PROCESSED='Y' WHERE ID = ? ", idToUpdate);
+//            this.jdbcTemplateGOPS.update(" update MESSAGESPJA SET PROCESSED='Y' WHERE ID = ? ", idToUpdate);
 
-            if (message.getBody(String.class).contains("fail")) {
-                throw new RuntimeException("Failing in messagelistener-onMessage()");
-            }
+//            if (message.getBody(String.class).contains("fail")) {
+//                throw new RuntimeException("Failing in messagelistener-onMessage()");
+//            }
 
         } catch (JMSException ex) {
             ex.printStackTrace();

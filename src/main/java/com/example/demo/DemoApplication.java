@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import org.apache.activemq.artemis.api.core.client.ClientMessage;
+import org.apache.activemq.artemis.jms.client.ActiveMQTextMessage;
 import org.apache.activemq.artemis.jms.client.ActiveMQXAConnectionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
@@ -7,8 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.jta.atomikos.AtomikosConnectionFactoryBean;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jms.JmsException;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessagePostProcessor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageProducer;
 import javax.sql.DataSource;
 import java.util.Map;
 import java.util.Optional;
@@ -92,28 +99,36 @@ public class DemoApplication {
 		@PostMapping
 		@Transactional
 		public void write(@RequestBody Map<String, String> payload,
-						  @RequestParam Optional<Boolean> rollback) {
+						  @RequestParam Optional<Boolean> rollback)  {
 
 			if (this.jdbcTemplateODS == null || this.jdbcTemplateGOPS == null) {
 				System.out.println("db templates returning null");
 				return;
 			}
 
-			String id = payload.get("ID");
-			String message = payload.get("MESSAGE");
+			String message = "";
+			String uoo = "UOOBASE";
 
-			this.jdbcTemplateODS.update(" insert into MESSAGESPJA (ID, MESSAGE, PROCESSED) values (?,?,'N')",
-					id, message);
-			this.jdbcTemplateGOPS.update(" insert into MESSAGESPJA (ID, MESSAGE, PROCESSED) values (?,?,'N')",
-					id, message);
+			for (int i=0 ; i < 50 ; i++) {
 
-			String messageToSend = "Added id: " + id + " message: " + message + " to both databases";
+				message = "test message " + i;
+				if (i % 10 == 0) {
+					uoo = "UOO" + i;
+				}
 
-			this.jmsTemplate.convertAndSend("GOPS.TEST.QUEUE", messageToSend);
+				this.jmsTemplate.getConnectionFactory().
 
-			if (rollback.orElse(false)) {
-				throw new RuntimeException("Throwing exception to cause transaction rollback");
+				this.jmsTemplate.convertAndSend("GOPS.TASK.INTERNAL.QUEUE.IN", message, new MessagePostProcessor() {
+					public Message postProcessMessage(Message message) throws JMSException {
+						message.setStringProperty("JMSXGroupID", uoo);
+						return message;
+					}
+				});
+
 			}
+
+
+
 		}
 
 	}
