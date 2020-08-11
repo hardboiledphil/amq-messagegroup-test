@@ -1,6 +1,8 @@
 # Getting Started
 
 
+**As of July 2020 - this code was branched while testing the MessageGroup processing on AMQ.**
+
 Application is stored in git repo
 
 master branch was first attempt at basic dual connection scenario
